@@ -1,3 +1,20 @@
 {
-  "files": {}
+  "files": {
+    "login_details.csv": [
+      {
+        "id": "997d1778-033c-4e32-8642-463789e40142",
+        "line": 3,
+        "version": 161,
+        "index": 188
+      }
+    ],
+    "main.py": [
+      {
+        "id": "42edae07-ef84-4ad0-a3e0-d7b92d0e849b",
+        "line": 328,
+        "version": 23470,
+        "index": 14059
+      }
+    ]
+  }
 }

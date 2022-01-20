@@ -30,35 +30,31 @@ class Character(object):
     
     def describe(self):
 		# type(self).__name__ ?
-        print(f"""
+        description = f"""
           Class: {self.__class__.__name__}
           ----------------
           Name: {self.name}
           Health: {self.health}
           Full Damage: {self.full_damage}
-        """)
-    
-    # RECOIL DAMAGE TO SELF
-    def attack_self(self, damage):
-        pass
-        
-
+        """
+        return description
+      
     # ATTACKS
     def conservative_attack(self, attack_name):
         # NO DAMAGE DEALT TO SELF
-        damage = self.full_damage * uniform(0.4, 0.6)
+        damage = self.full_damage * uniform(0.5, 0.6)
         damage = round(damage)
         return damage
 
     def balanced_attack(self, attack_name):
         # MINOR DAMAGE DEALT TO SELF
-        damage = self.full_damage * uniform(0.6, 0.8)
+        damage = self.full_damage * uniform(0.3, 0.8)
         damage = round(damage)
         return damage
 
     def aggressive_attack(self, attack_name):
         # MEDIUM DAMAGE DEALT TO SELF
-        damage = self.full_damage * uniform(0.8, 1.0)
+        damage = self.full_damage * uniform(0.1, 1.0)
         damage = round(damage)
         return damage
         
@@ -79,27 +75,32 @@ class Assault(Character):
     #GETTER
     def get_damage_multi(self):
         return self.damage_multi
+
+    def get_aggro_attack(self):
+        return "Skateboard Smash"
+
+    def get_bal_attack(self):
+        return "Jumpkick"
+    
+    def get_con_attack(self):
+        return "Sling Shot"
+
+    
     #SETTER
     def set_damage_multi(self,damage_multi):
         self.damage_multi = damage_multi  
 
-    def attack(self, opponent):
-        print("""
-        1. Conservative
-        2. Balanced
-        3. Aggressive
-        """)
-        attack_type = input("Choose your attack! ").lower()
+    def attack(self, opponent, button_selected):
         damage = 0
-        if "con" in attack_type or "1" in attack_type:
-            damage = self.conservative_attack("Bottle Squirt")
-            print(f"{self.name} used Bottle Squirt...")
-        elif "bal" in attack_type or "2" in attack_type:
-            damage = self.balanced_attack("Wail")
-            print(f"{self.name} used Wail...")
-        elif "ag" in attack_type or "3" in attack_type:
-            damage = self.aggressive_attack("Hammer Smash")
-            print(f"{self.name} used Hammer Smash...")
+        if button_selected == 1:
+            damage = self.conservative_attack("Sling Shot")
+            print(f"{self.name} used Sling Shot...")
+        elif button_selected == 2:
+            damage = self.balanced_attack("Jumpkick")
+            print(f"{self.name} used... placeholder")
+        elif button_selected == 3:
+            damage = self.aggressive_attack("Skateboard Smash")
+            print(f"{self.name} used Skateboard Smash...")
         opponent.take_damage(round(damage * 1.1))
 
             
@@ -111,6 +112,15 @@ class Health(Character):
     # GETTER
     # def get_regenerate(self):
     #     return self.regenerate
+
+    def get_aggro_attack(self):
+        return "Hammer Time"
+
+    def get_bal_attack(self):
+        return "Flying Kick"
+    
+    def get_con_attack(self):
+        return "Sling Shot"
     # # SETTER   
     # def set_regenerate(self, regenerate):
     #     self.regenerate = regenerate
@@ -118,24 +128,17 @@ class Health(Character):
     def regenerate(self):
         self.set_health = self.get_health() * 1.1
     
-    def attack(self, opponent):
-        print("""
-        1. Conservative
-        2. Balanced
-        3. Aggressive
-        """)
-        self.get_health()
-        attack_type = input("Choose your attack! ")
+    def attack(self, opponent, attack_type):
         damage = 0
-        if "1" in attack_type or "con" in attack_type:
-            damage = self.conservative_attack("Belch")
-            print(f"{self.name} used Belch...")
-        elif "2" in attack_type or "bal" in attack_type:
-            damage = self.balanced_attack("Doughnut Throw")
-            print(f"{self.name} used Doughnut Throw...")
-        elif "3" in attack_type or "ag" in attack_type:
-            damage = self.aggressive_attack("Strangle")
-            print(f"{self.name} used Strangle...")
+        if attack_type == 1:
+            damage = self.conservative_attack("Sling Shot")
+            print(f"{self.name} used Sling Shot...")
+        elif attack_type == 2:
+            damage = self.balanced_attack("Flying Kick")
+            print(f"{self.name} used Flying Kick...")
+        elif attack_type == 3:
+            damage = self.aggressive_attack("Sling Shot")
+            print(f"{self.name} used Sling Shot...")
             
         opponent.take_damage(damage)
         self.regenerate()
@@ -157,27 +160,30 @@ class Defence(Character):
     # GETTER
     def get_block_damage(self):
         return self.block_damage 
+
+    def get_aggro_attack(self):
+        return "Skipping Rope Whip"
+
+    def get_bal_attack(self):
+        return "Broom attack"
+    
+    def get_con_attack(self):
+        return "Sling Shot"
     # SETTER    
     def set_block_damage(self, block_damage):
         self.block_damage = block_damage
     
-    def attack(self, opponent):
-        print("""
-        1. Conservative
-        2. Balanced
-        3. Aggressive
-        """)
-        attack_type = input("Choose your attack! ")
+    def attack(self, opponent, attack_type):
         damage = 0
-        if "1" in attack_type or "con" in attack_type:
-            damage = self.conservative_attack("Slam Poetry")
-            print(f"{self.name} used Slam Poetry...")
-        elif "2" in attack_type or "bal" in attack_type:
-            damage = self.balanced_attack("Saxophone Screech")
-            print(f"{self.name} used Saxophone Screech...")
-        elif "3" in attack_type or "ag" in attack_type:
-            damage = self.aggressive_attack("Book Throw")
-            print(f"{self.name} used ...")
+        if attack_type == 1:
+            damage = self.conservative_attack("Sling Shot")
+            print(f"{self.name} used Sling Shot...")
+        elif attack_type == 2:
+            damage = self.balanced_attack("Broom attack")
+            print(f"{self.name} used Broom attack...")
+        elif attack_type == 3:
+            damage = self.aggressive_attack("Skipping Rope Whip")
+            print(f"{self.name} used Skipping Rope Whip...")
             
         opponent.take_damage(damage)
 
