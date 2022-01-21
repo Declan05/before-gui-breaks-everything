@@ -97,7 +97,7 @@ class Assault(Character):
             print(f"{self.name} used Sling Shot...")
         elif button_selected == 2:
             damage = self.balanced_attack("Jumpkick")
-            print(f"{self.name} used... placeholder")
+            print(f"{self.name} used... Jumpkick")
         elif button_selected == 3:
             damage = self.aggressive_attack("Skateboard Smash")
             print(f"{self.name} used Skateboard Smash...")

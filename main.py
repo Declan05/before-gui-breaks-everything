@@ -15,15 +15,9 @@ selected_characters = []
 # sound.volume = 0.5
 # sound.set_loop(5)
 
+######## CLEAR FUNCTION ########
 main_box = None
-        
-def clear_box_grid():
-    global main_box
-    if main_box is not None:
-        main_box.destroy()
-    main_box = Box(app, width = 700,height =500,layout="grid")
-    return main_box
-    
+            
 def clear_box():
     global main_box
     if main_box is not None:
@@ -39,7 +33,7 @@ valid_sign_in = 0
 usernames = []
 
 def sign_in(username, password):
-    error_message = Text(main_box,text="")
+    # error_message = Text(main_box,text="")
     global valid_sign_in
     retrieved_username = username.value
     retrieved_password = password.value
@@ -49,10 +43,9 @@ def sign_in(username, password):
         valid_sign_in += 1
         home_page()
     elif login_check == -4:
-        error_message.destroy()
+        # error_message.destroy()
         text = Text(main_box, text = "ERROR")
         text.text_color = "red"
-
 
 def sign_up_button(username, new_password, confirm_password):
      error_message = Text(main_box, text="")
@@ -69,14 +62,13 @@ def sign_up_button(username, new_password, confirm_password):
         error_message = Text(main_box, text = "Passwords do not match.")
         error_message.text_color = "red"
  
-
 def sign_up_menu():
     clear_box()
-    welcome_text = Text(main_box, text="Welcome to Simpsons Brawler!", size=30)
+    welcome_text = Text(main_box, text="Welcome\nto\nSimpsons Brawler!", size=30)
     text_label = Text(main_box, text="Register a new username ")
     username = TextBox(main_box, width=20)
     text_label = Text(main_box, text="Enter a password ")
-    new_password = TextBox(main_box, width=20, hide_text = True)
+    new_password = TextBox(main_box, width=20, hide_text=True)
     confirm_password = TextBox(main_box, width=20, hide_text = True)
     buttons = Box(main_box, layout="grid")
     menu_buttons = Box(buttons, layout="grid", grid=[1,0])
@@ -86,11 +78,11 @@ def sign_up_menu():
   
 # DEFINING WINDOW CHARACTERISTICS
 app = App(title = "Simpsons Brawler",  bg="white")
-#app.set_full_screen()
+
 def home_page():
-    clear_box()
+    main_box = clear_box()
     if valid_sign_in < 2:
-        welcome_text = Text(main_box, text = "Welcome to Simpsons Brawler!", size=30)
+        welcome_text = Text(main_box, text="Welcome\nto\nSimpsons Brawler!", size=20)
         text_label = Text(main_box, text="Enter your username ")
         user_name123 = TextBox(main_box, width=20)
         text_label = Text(main_box, text="Enter your password ")
@@ -100,16 +92,19 @@ def home_page():
         PushButton(menu_buttons, command=lambda:sign_in(user_name123, password1), width=5, height=1, text="Sign in", grid=[0,1])
         PushButton(menu_buttons, command=sign_up_menu, width=5, height=1, text="Sign up", grid=[0,3])
     else:
-      show_rules()
-
-main_box = Box(app, width=700, height=500, layout="grid")
-
+        show_rules()
 
 home_page()
+# main_box = Box(app, width=700, height=500, layout = "grid")
+# def pass_home():
+#     if valid_sign_in < 2:
+#         home_page()
+#     else:
+#         show_rules()
 
 def show_rules():
     rule_title = Text(main_box,text = "Here are the rules!", size = 20,)
-    rules_text = Text(main_box, text = """Welcome to Simpsons Brawler! \nThe rules are simple. Two players select their fighters \nand duke it out until one is defeated!\nOn each turn players can decide from 3 attacks, conservative, balanced or aggressive. The more aggressive the attack, the more damage is done to both the opponent and the player dealing the damage. Best of 3 wins the game and your name shall live on in the immortal realm of a cvs file.""")
+    rules_text = Text(main_box, text = """Welcome to Simpsons Brawler! \nThe rules are simple. Two players select their fighters \nand duke it out until one is defeated!\nOn each turn players can decide from 3 attacks\n They range in the damage that can be dealt.\n The more aggressive the attack, the wider the range of damage is done to the opponent. Best of 3 wins the game and your name shall live on in the immortal realm of a cvs file.""")
     # GOTTEN RID OF HEIGHT AND WIDTH IN rules_text
     next_page = PushButton(main_box, text="Next",command=coin_flip)  
 
@@ -142,8 +137,8 @@ def coin_outcome(user_choice):
 def coin_flip():
     clear_box()
     screen_text = Text(main_box, text=f"{usernames[0]}, pick either heads or tails!")
-    heads_button = PushButton(main_box, command=lambda:coin_outcome("Heads"), text="Heads")
-    tails_button = PushButton(main_box, command=lambda:coin_outcome("Tails"), text="Tails", width=5)
+    heads_button = PushButton(main_box, command=lambda:coin_outcome("heads"), text="Heads")
+    tails_button = PushButton(main_box, command=lambda:coin_outcome("tails"), text="Tails", width=5)
     coin_flip_gif = Picture(main_box, image="Pictures/coin-flip-50.gif")
 
 
@@ -206,14 +201,24 @@ def selected_character(identifier):
         
     if len(remove_character) > 1:
         display_fighting()
-player_num = 1
+
 
 ###### FIGHTING ##########
+
+def proceed_to_next(attacker, defender):
+  if defender.get_health() < 1:
+    end_fighting(attacker, defender)
+  else :
+    display_fighting()
+
+
+player_num = 1
+round_num = 1
 def display_fighting():
     clear_box()
     global player_num
-  
-    attack_box =Box(main_box, border = True, width = "fill" ,height = 250)
+    global round_num
+    attack_box =Box(main_box, border=False, width="fill" ,height=250)
     defender = selected_characters[player_num]
     
     standing = Picture(attack_box, image=f"{remove_character[player_num]}/standing_reversed.png", align = "right")
@@ -223,35 +228,48 @@ def display_fighting():
     elif player_num == 0:
         player_num += 1
     attacker = selected_characters[player_num]
-    attack_buttons= Box(main_box, layout = "grid", align = "bottom", width = "100", border = True)
-    PushButton(attack_buttons, command = lambda:fight_loop(1, player_num, defender_num), text = attacker.get_con_attack(), grid = [0,0])
-    PushButton(attack_buttons, command = lambda:fight_loop(2, player_num, defender_num), text = attacker.get_bal_attack(), grid = [2,0])
-    PushButton(attack_buttons, command = lambda:fight_loop(3, player_num, defender_num), text= attacker.get_aggro_attack(), grid = [4,0])
-    standing = Picture(attack_box, image = f"{remove_character[player_num]}/standing.png", align = "left")
+    attack_buttons= Box(main_box, layout = "grid", align = "bottom", width = "fill", height = 250, border = True)
+    Text(attack_buttons, text = f"Round {round_num}", grid = [9,0])
     
+    PushButton(attack_buttons, command = lambda:fight_loop(1, player_num, defender_num), text=attacker.get_con_attack(), grid = [45,300])
+    PushButton(attack_buttons, command = lambda:fight_loop(2, player_num, defender_num), text=attacker.get_bal_attack(), grid = [50,300])
+    PushButton(attack_buttons, command = lambda:fight_loop(3, player_num, defender_num), text=attacker.get_aggro_attack(), grid = [55,300])
+    standing = Picture(attack_box, image = f"{remove_character[player_num]}/standing.png", align = "left")
+
 
 def fight_loop(attack_type, attacker_num, defender_num):
+    global fixed_health_player_1
+    global fixed_health_player_2
+
     attacker = selected_characters[attacker_num]
     defender = selected_characters[defender_num]
+    fixed_health_player_1 = attacker.get_health()
+    fixed_health_player_2 = defender.get_health()
     fight(attacker, defender, attack_type)
 
 
-# def sleep_gui():
-#     text.value = int(text.value) + 1
-
-# text = Text(app, text="1")
-# text.repeat(10, sleep_gui)
 player_1_score = 0
 player_2_score = 0
+fixed_health_player_1 = 50
+fixed_health_player_2 = 50
+asdasd = True
+
+
+def end_fighting(winner, loser):
+    clear_box()
+    Text( main_box, text = f"WINNER is {winner.get_name()}")
+    PushButton(main_box, command=coin_flip, text="Play Again", width = 8, height = 1)
+    PushButton(main_box, text = "Home Page",command=home_page, width = 8, height = 1)
+
+  
 
 def fight(attacker, defender, attack_type):
-    global player_num
-    global player_1_score
-    global player_2_score
-    first_character = selected_characters[0]
-    second_character = selected_characters[1]
-    fixed_health_player_1 = first_character.get_health()
-    fixed_health_player_2 = second_character.get_health() 
+    global fixed_health_player_1, fixed_health_player_2, player_num, player_1_score, player_2_score, round_num, asdasd
+    if asdasd == True:
+        fixed_health_player_1 = attacker.get_health()
+        fixed_health_player_2 = defender.get_health() 
+        asdasd = False
+
     clear_box()
     Box(main_box)
     attack_box =Box(main_box, border = False , width = "fill", height = 250)
@@ -260,30 +278,36 @@ def fight(attacker, defender, attack_type):
         align = "left")
         damaged = Picture(attack_box, image = f"{defender.get_name()}/hurt_reversed.png", align = "right")
         Text(main_box, text = f"{attacker.get_name()} used {attacker.get_con_attack()} ",size = 10)
-        PushButton(main_box, command=lambda:display_fighting(), text="Next")
+        PushButton(main_box, command=proceed_to_next, args=[attacker, defender], text="Next")
     elif attack_type == 2:
         smash = Picture(attack_box, image = f"{attacker.get_name()}/attack_2.png", align = "left")
         Text(main_box, text = f"{attacker.get_name()} used {attacker.get_bal_attack()} ",size = 10)
         damaged = Picture(attack_box, image = f"{defender.get_name()}/hurt_reversed.png", align = "right")
-        PushButton(main_box, command=lambda:display_fighting(), text="Next")
+        PushButton(main_box, command=proceed_to_next, args=[attacker, defender], text="Next")
     elif attack_type == 3:
         smash = Picture(attack_box, image = f"{attacker.get_name()}/attack_3.png", align = "left")
         Text(main_box, text = f"{attacker.get_name()} used {attacker.get_aggro_attack()} ",size = 10)
         damaged = Picture(attack_box, image = f"{defender.get_name()}/hurt_reversed.png", align = "right")
-        PushButton(main_box, command=lambda:display_fighting(), text="Next")
+        PushButton(main_box, command=proceed_to_next, args=[attacker, defender], text="Next")
     attacker.attack(defender, attack_type)
-    if defender.get_health() < 1:
-        #text = Text(main_box, text = f"Round{round_num}")
-        if player_num == 0:
-            player_1_score +=1
+
+    # if defender.get_health() < 1:
+    #     dead = Picture(attack_box, image = f"{defender.get_name()}/dead_reversed.png", align = "right")
+    #     round_num +=1
+    #     if player_num == 0:
+    #         player_1_score +=1
             
-        else:
-            player_2_score +=1
+    #     else:
+    #         player_2_score +=1
             
-        if player_1_score + player_2_score > 0:
-            KeyboardInterrupt
-        first_character.set_health = fixed_health_player_1
-        second_character.set_health = fixed_health_player_2
+    #     if player_1_score + player_2_score > 4:
+    #         pass
+
+    #     # the reason this isn't working is because the characters on screen aren't using the classes: selected_characters[0] and selected_characters[1]. The classes we're using are attacker and defender
+    #     selected_characters[0].set_health = fixed_health_player_1
+    #     selected_characters[1].set_health = fixed_health_player_2
+
+
 
 
 app.display()
