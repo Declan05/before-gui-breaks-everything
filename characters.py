@@ -66,7 +66,7 @@ class Character(object):
         print(f"\033[31m{self.name} has taken {damage} damage.\033[0mTheir health is now \033[32m{self.health}.\033[0m\n")    
 
 
-# CHARACTER SUBCLASSES
+# CHARACTER SUBCLASSES ###################
 class Assault(Character):
     def __init__(self, name, full_damage, health, speech, damage_multi):
         super().__init__(name, full_damage, health, speech)
